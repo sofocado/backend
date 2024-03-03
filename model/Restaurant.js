@@ -1,6 +1,11 @@
 const mongoose = require("mongoose");
 
 const restaurantSchema = new mongoose.Schema({
+  rid: {
+    type: String,
+    unique: true, // Уникальный идентификатор
+    required: true,
+  },
   name: {
     type: String,
     required: true,
