@@ -49,10 +49,10 @@ async function getRestaurantByName(name) {
   }
 }
 
-async function updateRestaurant(name, updatedData) {
+async function updateRestaurant(rid, updatedData) {
   try {
     const restaurant = await Restaurant.findOneAndUpdate(
-      { name: name },
+      { rid: rid },
       { $set: updatedData },
       { new: true }
     );

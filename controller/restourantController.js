@@ -36,7 +36,7 @@ async function getRestaurant(req, res) {
 
 async function updateRestaurant(req, res) {
   try {
-    const restaurantName = req.body.name; 
+    const restaurantRid = req.body.rid;
     const updatedData = {
       address: req.body.address,
       countTable: req.body.countTable,
@@ -44,7 +44,7 @@ async function updateRestaurant(req, res) {
     };
 
     const restaurant = await restaurantService.updateRestaurant(
-      restaurantName,
+      restaurantRid,
       updatedData
     );
 
