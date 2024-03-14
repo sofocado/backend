@@ -24,8 +24,8 @@ async function listRestaurants(req, res) {
 
 async function getRestaurant(req, res) {
   try {
-    const restaurantName = req.body.name;
-    const restaurant = await restaurantService.getRestaurantByName(
+    const restaurantName = req.body.rid;
+    const restaurant = await restaurantService.getRestaurantByRid(
       restaurantName
     );
     res.json(restaurant);
@@ -37,10 +37,17 @@ async function getRestaurant(req, res) {
 async function updateRestaurant(req, res) {
   try {
     const restaurantRid = req.body.rid;
+    const imagePath = req.file ? req.file.path : null;
     const updatedData = {
       address: req.body.address,
       countTable: req.body.countTable,
       description: req.body.description,
+      category: req.body.category,
+      isFavorite: req.body.isFavorite,
+      name: req.body.name, 
+      workstarttime: req.body.workstarttime,
+      workendtime: req.body.workendtime,
+      path: imagePath, 
     };
 
     const restaurant = await restaurantService.updateRestaurant(
@@ -50,13 +57,15 @@ async function updateRestaurant(req, res) {
 
     res.status(200).json({
       result_code: 0,
-      message: "Restaurant updated successfully",
+      message: "Ресторан успешно обновлен",
       data: restaurant,
     });
   } catch (error) {
     res.status(404).json({ message: error.message });
   }
 }
+
+
 
 module.exports = {
   addRestaurant,

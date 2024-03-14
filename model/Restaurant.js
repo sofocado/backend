@@ -3,7 +3,7 @@ const mongoose = require("mongoose");
 const restaurantSchema = new mongoose.Schema({
   rid: {
     type: String,
-    unique: true, 
+    unique: true,
     required: true,
   },
   name: {
@@ -12,9 +12,12 @@ const restaurantSchema = new mongoose.Schema({
   },
   description: String,
   address: String,
-  startTime: Number,
-  endTime: Number,
+  workstarttime: Number,
+  workendtime: Number,
+  isFavorite: { type: Number, default: 0 },
+  category: String,
   countTable: Number,
+  path: String,
 });
 
 const Restaurant = mongoose.model("Restaurant", restaurantSchema);

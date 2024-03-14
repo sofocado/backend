@@ -33,9 +33,9 @@ async function listRestaurants() {
   }
 }
 
-async function getRestaurantByName(name) {
+async function getRestaurantByRid(rid) {
   try {
-    const restaurant = await Restaurant.findOne({ name: name });
+    const restaurant = await Restaurant.findOne({ rid: rid }); 
     if (!restaurant) {
       throw new Error("Restaurant not found");
     }
@@ -72,6 +72,6 @@ async function updateRestaurant(rid, updatedData) {
 module.exports = {
   addRestaurant,
   listRestaurants,
-  getRestaurantByName,
+  getRestaurantByRid,
   updateRestaurant,
 };
