@@ -1,10 +1,8 @@
-const uuid = require("uuid");
 const Restaurant = require("../model/Restaurant");
 
 async function addRestaurant(data) {
   try {
-    const rid = uuid.v4();
-    const newRestaurant = new Restaurant({ ...data, rid });
+    const newRestaurant = new Restaurant(data);
     const savedRestaurant = await newRestaurant.save();
     return {
       result_code: 0,

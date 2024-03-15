@@ -16,9 +16,9 @@ exports.addCategory = async (name) => {
   }
 };
 
-exports.deleteCategory = async (categoryId) => {
+exports.deleteCategory = async (cid) => {
   try {
-    const deletedCategory = await Category.findByIdAndDelete(categoryId);
+    const deletedCategory = await Category.findOneAndDelete({ cid });
     return {
       result_code: 0,
       result_msg: "Success!",
