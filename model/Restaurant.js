@@ -1,10 +1,12 @@
 const mongoose = require("mongoose");
+const { v4: uuidv4 } = require("uuid");
 
 const restaurantSchema = new mongoose.Schema({
   rid: {
     type: String,
     unique: true,
     required: true,
+    default: uuidv4,
   },
   name: {
     type: String,

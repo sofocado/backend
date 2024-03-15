@@ -3,7 +3,7 @@ const favoriteService = require("../services/favoriteService");
 async function addFavorite(req, res) {
   try {
     const { rid } = req.body;
-    const uid = req.user.uid; // Assuming user is authenticated and user id is available in request
+    const uid = req.user.uid; 
     const result = await favoriteService.addFavorite(rid, uid);
     res.json(result);
   } catch (error) {
@@ -13,7 +13,7 @@ async function addFavorite(req, res) {
 
 async function listFavorites(req, res) {
   try {
-    const uid = req.user.uid; // Assuming user is authenticated and user id is available in request
+    const uid = req.user.uid;
     const result = await favoriteService.listFavorites(uid);
     res.json(result);
   } catch (error) {
@@ -24,7 +24,7 @@ async function listFavorites(req, res) {
 async function removeFavorite(req, res) {
   try {
     const { rid } = req.body;
-    const uid = req.user.uid; // Assuming user is authenticated and user id is available in request
+    const uid = req.user.uid;
     const result = await favoriteService.removeFavorite(rid, uid);
     res.json(result);
   } catch (error) {
