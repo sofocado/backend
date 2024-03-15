@@ -2,6 +2,7 @@ const express = require("express");
 const jwt = require("jsonwebtoken");
 const mongoose = require("mongoose");
 const User = require("../model/User");
+const uuid = require("uuid");
 
 mongoose
   .connect(process.env.MONGODB_URI, {
@@ -34,18 +35,20 @@ router.delete("/logout", (req, res) => {
 });
 
 router.post("/login", async (req, res) => {
-  const { username, password } = req.body;
+  const { uid, phoneNumber, password } = req.body;
 
   try {
-    const user = await User.findOne({ username });
+    const user = await User.findOne({ phoneNumber });
 
     if (!user || user.password !== password) {
-      return res.status(401).json({ message: "Invalid username or password." });
+      return res
+        .status(401)
+        .json({ message: "Invalid phone number or password." });
     }
 
-    const accessToken = generateAccessToken({ username });
+    const accessToken = generateAccessToken({ phoneNumber });
     const refreshToken = jwt.sign(
-      { username },
+      { phoneNumber },
       process.env.REFRESH_TOKEN_SECRET
     );
     refreshTokens.push(refreshToken);
@@ -56,7 +59,7 @@ router.post("/login", async (req, res) => {
       data: {
         access_token: accessToken,
         refresh_token: refreshToken,
-        username,
+        user: user,
       },
     });
   } catch (error) {
@@ -66,10 +69,11 @@ router.post("/login", async (req, res) => {
 
 
 router.post("/register", async (req, res) => {
-  const { username, password } = req.body;
+  const { password, name, phoneNumber } = req.body;
 
   try {
-    const user = new User({ username, password });
+    const uid = uuid.v4(); 
+    const user = new User({ uid, password, name, phoneNumber }); 
     await user.save();
     res.status(201).json({ message: "User registered successfully." });
   } catch (error) {
@@ -78,7 +82,7 @@ router.post("/register", async (req, res) => {
 });
 
 function generateAccessToken(user) {
-  return jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, { expiresIn: "60s" });
+  return jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, { expiresIn: "1h" });
 }
 
 module.exports = router;
