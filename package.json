@@ -5,7 +5,8 @@
   "main": "app.js",
   "scripts": {
     "dev": "nodemon app.js",
-    "dev2": "nodemon services/authService.js"
+    "dev2": "nodemon services/authService.js",
+    "build": "echo 'Building the project...'"
   },
   "author": "",
   "license": "ISC",
