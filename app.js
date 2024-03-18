@@ -16,11 +16,11 @@ app.use(express.json());
 const posts = {};
 
 app.use("/auth", authRoutes);
-app.use("/restaurant", authenticateToken, restaurantRoutes);
-app.use("/upload", authenticateToken, uploadRoutes);
+app.use("/restaurant", restaurantRoutes);
+app.use("/upload", uploadRoutes);
 app.use("/category", authenticateToken, categoryRoutes);
 app.use("/favorite", authenticateToken, favoriteRoutes);
-app.use("/banner", authenticateToken, bannerRoutes);
+app.use("/banner", bannerRoutes);
 
 app.use("/uploads", express.static("uploads"));
 

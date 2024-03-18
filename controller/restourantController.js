@@ -15,7 +15,12 @@ async function addRestaurant(req, res) {
 
 async function listRestaurants(req, res) {
   try {
-    const restaurants = await restaurantService.listRestaurants();
+    const filters = {
+      keyword: req.body.keyword,
+      categorySort: req.body.categorySort,
+    };
+
+    const restaurants = await restaurantService.listRestaurants(filters);
     res.json(restaurants);
   } catch (error) {
     res.status(500).json({ message: error.message });
