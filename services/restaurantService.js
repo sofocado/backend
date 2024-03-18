@@ -16,9 +16,19 @@ async function addRestaurant(data) {
   }
 }
 
-async function listRestaurants() {
+async function listRestaurants(filters) {
   try {
-    const restaurants = await Restaurant.find();
+    let query = {};
+
+    if (filters.keyword) {
+      query.name = { $regex: filters.keyword, $options: "i" };
+    }
+
+    if (filters.categorySort !== undefined && filters.categorySort !== "") {
+      query.category = filters.categorySort;
+    }
+
+    const restaurants = await Restaurant.find(query);
     return {
       result_code: 0,
       result_msg: "Success!",
@@ -30,6 +40,30 @@ async function listRestaurants() {
     throw error;
   }
 }
+
+
+// async function listRestaurants(filters) {
+//   try {
+//     let query = {};
+//     if (filters.keyword) {
+//       query.name = { $regex: filters.keyword, $options: "i" };
+//     }
+//     if (filters.categorySort) {
+//       query.category = filters.categorySort;
+//     }
+
+//     const restaurants = await Restaurant.find(query);
+//     return {
+//       result_code: 0,
+//       result_msg: "Success!",
+//       data: {
+//         rows: restaurants,
+//       },
+//     };
+//   } catch (error) {
+//     throw error;
+//   }
+// }
 
 async function getRestaurantByRid(rid) {
   try {
