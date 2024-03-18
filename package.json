@@ -4,10 +4,8 @@
   "description": "",
   "main": "app.js",
   "scripts": {
-    "install": "npm install",
-    "build": "echo 'Building the project...'",
     "dev": "nodemon app.js",
-    "dev2": "nodemon services/authService.js"
+    "install": "npm install --omit=dev"
   },
   "author": "",
   "license": "ISC",
