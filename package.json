@@ -4,7 +4,9 @@
   "description": "",
   "main": "app.js",
   "scripts": {
-    "dev": "node app.js"
+    "start": "node app.js",
+    "dev": "node app.js",
+    "build": "echo 'No build script specified'"
   },
   "author": "",
   "license": "ISC",
