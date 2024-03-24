@@ -1,40 +1,40 @@
 const Favorite = require("../model/Favorite");
+const Restaurant = require("../model/Restaurant")
 
-async function addFavorite(rid, uid) {
+async function addFavorite(userId, restaurantId) {
   try {
-    const favorite = new Favorite({ restaurant: rid, user: uid });
-    await favorite.save();
-    return {
-      result_code: 0,
-      result_msg: "Success! Restaurant added to favorites.",
-    };
-  } catch (error) {
-    throw error;
-  }
-}
-
-async function listFavorites(uid) {
-  try {
-    const favorites = await Favorite.find({ user: uid }).populate(
-      "restaurant"
+    const newFavorite = new Favorite({ userId, restaurantId });
+    const savedFavorite = await newFavorite.save();
+    await Restaurant.updateOne(
+      { rid: restaurantId },
+      { $set: { isFavorite: 1 } }
     );
-    return {
-      result_code: 0,
-      result_msg: "Success! Here are your favorite restaurants.",
-      data: favorites,
-    };
+
+    return savedFavorite;
   } catch (error) {
     throw error;
   }
 }
 
-async function removeFavorite(rid, uid) {
+async function listFavorites(userId) {
   try {
-    await Favorite.findOneAndRemove({ restaurant: rid, user: uid });
-    return {
-      result_code: 0,
-      result_msg: "Success! Restaurant removed from favorites.",
-    };
+    const favorites = await Favorite.find({ userId });
+    return favorites;
+  } catch (error) {
+    throw error;
+  }
+}
+
+async function removeFavorite(userId, restaurantId) {
+  try {
+    await Favorite.deleteOne({ userId, restaurantId });
+    const isFavorite = await Favorite.exists({ restaurantId });
+    if (!isFavorite) {
+      await Restaurant.updateOne(
+        { rid: restaurantId },
+        { $set: { isFavorite: 0 } }
+      );
+    }
   } catch (error) {
     throw error;
   }

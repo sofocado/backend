@@ -1,12 +1,12 @@
 const mongoose = require("mongoose");
 
 const favoriteSchema = new mongoose.Schema({
-  restaurant: {
+  userId: {
     type: String,
     required: true,
   },
-  user: {
-    type: String, 
+  restaurantId: {
+    type: String,
     required: true,
   },
 });
