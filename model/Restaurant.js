@@ -16,7 +16,6 @@ const restaurantSchema = new mongoose.Schema({
   address: String,
   workstarttime: Number,
   workendtime: Number,
-  isFavorite: { type: Number, default: 0 },
   category: String,
   countTable: Number,
   path: String,

@@ -23,10 +23,16 @@ async function listFavorites(userId) {
 
     const favoriteRestaurants = await Restaurant.find({
       rid: { $in: restaurantIds },
-      isFavorite: 1,
     });
 
-    return favoriteRestaurants;
+    const favoriteRestaurantsWithFlag = favoriteRestaurants.map(
+      (restaurant) => ({
+        ...restaurant.toObject(),
+        isFavorite: 1,
+      })
+    );
+
+    return favoriteRestaurantsWithFlag;
   } catch (error) {
     throw error;
   }
@@ -35,13 +41,6 @@ async function listFavorites(userId) {
 async function removeFavorite(userId, restaurantId) {
   try {
     await Favorite.deleteOne({ userId, restaurantId });
-    const isFavorite = await Favorite.exists({ restaurantId });
-    if (!isFavorite) {
-      await Restaurant.updateOne(
-        { rid: restaurantId },
-        { $set: { isFavorite: 0 } }
-      );
-    }
   } catch (error) {
     throw error;
   }
