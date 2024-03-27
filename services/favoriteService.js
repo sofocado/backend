@@ -19,7 +19,14 @@ async function addFavorite(userId, restaurantId) {
 async function listFavorites(userId) {
   try {
     const favorites = await Favorite.find({ userId });
-    return favorites;
+    const restaurantIds = favorites.map((favorite) => favorite.restaurantId);
+
+    const favoriteRestaurants = await Restaurant.find({
+      rid: { $in: restaurantIds },
+      isFavorite: 1,
+    });
+
+    return favoriteRestaurants;
   } catch (error) {
     throw error;
   }

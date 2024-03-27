@@ -6,5 +6,6 @@ router.post("/token", authService);
 router.delete("/logout", authService);
 router.post("/login", authService);
 router.post("/register", authService);
+router.post("/update", authService);
 
 module.exports = router;

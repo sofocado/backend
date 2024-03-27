@@ -18,8 +18,9 @@ const posts = {};
 app.use("/auth", authRoutes);
 app.use("/restaurant", restaurantRoutes);
 app.use("/upload", uploadRoutes);
-app.use("/category", authenticateToken, categoryRoutes);
-app.use("/favorite", authenticateToken, favoriteRoutes);
+app.use("/category", categoryRoutes);
+// app.use("/category", authenticateToken, categoryRoutes);
+app.use("/favorite", favoriteRoutes);
 app.use("/banner", bannerRoutes);
 
 app.use("/uploads", express.static("uploads"));

@@ -24,6 +24,7 @@ const restaurantSchema = new mongoose.Schema({
   avgCheque: Number,
   parking: { type: Number, default: 0 },
   prayingRoom: { type: Number, default: 0 },
+  rating: Number,
 });
 
 const Restaurant = mongoose.model("Restaurant", restaurantSchema);

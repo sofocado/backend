@@ -24,7 +24,7 @@ function authenticateToken(req, res, next) {
       req.user = existingUser;
       next();
     } catch (error) {
-      res.status(500).json({ message: error.message });
+      res.status(500).json({ result_msg: error.message });
     }
   });
 }

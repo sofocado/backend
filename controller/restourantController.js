@@ -3,13 +3,9 @@ const restaurantService = require("../services/restaurantService");
 async function addRestaurant(req, res) {
   try {
     const restaurant = await restaurantService.addRestaurant(req.body);
-    res.status(200).json({
-      result_code: 0,
-      message: "Restaurant added successfully",
-      data: restaurant,
-    });
+    res.status(200).json(restaurant);
   } catch (error) {
-    res.status(400).json({ message: error.message });
+    res.status(400).json({ result_msg: error.message });
   }
 }
 
@@ -23,54 +19,34 @@ async function listRestaurants(req, res) {
     const restaurants = await restaurantService.listRestaurants(filters);
     res.json(restaurants);
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    res.status(500).json({ result_msg: error.message });
   }
 }
 
 async function getRestaurant(req, res) {
   try {
-    const restaurantName = req.body.rid;
+    const restaurantRid = req.body.rid;
     const restaurant = await restaurantService.getRestaurantByRid(
-      restaurantName
+      restaurantRid
     );
     res.json(restaurant);
   } catch (error) {
-    res.status(404).json({ message: error.message });
+    res.status(404).json({ result_msg: error.message });
   }
 }
 
 async function updateRestaurant(req, res) {
   try {
-    const restaurantRid = req.body.rid;
-    const imagePath = req.file ? req.file.path : null;
-    const updatedData = {
-      address: req.body.address,
-      countTable: req.body.countTable,
-      description: req.body.description,
-      category: req.body.category,
-      isFavorite: req.body.isFavorite,
-      name: req.body.name, 
-      workstarttime: req.body.workstarttime,
-      workendtime: req.body.workendtime,
-      path: imagePath, 
-    };
-
-    const restaurant = await restaurantService.updateRestaurant(
-      restaurantRid,
+    const { rid, ...updatedData } = req.body;
+    const updatedRestaurant = await restaurantService.updateRestaurant(
+      rid,
       updatedData
     );
-
-    res.status(200).json({
-      result_code: 0,
-      message: "Ресторан успешно обновлен",
-      data: restaurant,
-    });
+    res.json(updatedRestaurant);
   } catch (error) {
-    res.status(404).json({ message: error.message });
+    res.status(500).json({ result_msg: error.message });
   }
 }
-
-
 
 module.exports = {
   addRestaurant,

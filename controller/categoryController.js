@@ -10,27 +10,27 @@ async function addCategory(req, res) {
     const result = await categoryService.addCategory(name);
     res.status(201).json({
       result_code: 0,
-      message: "Category added successfully",
+      result_msg: "Category added successfully",
       data: result.data.rows,
     });
   } catch (error) {
-    res.status(400).json({ message: error.message });
+    res.status(400).json({ result_msg: error.message });
   }
 }
 
 async function deleteCategory(req, res) {
   try {
-    const { categoryId } = req.params;
-    const result = await categoryService.deleteCategory(categoryId);
+    const { cid } = req.body; 
+    const result = await categoryService.deleteCategory(cid);
     if (!result.data.rows) {
       return res.status(404).json({ error: "Category not found" });
     }
     res.status(200).json({
       result_code: 0,
-      message: "Category deleted successfully",
+      result_msg: "Category deleted successfully",
     });
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    res.status(500).json({ result_msg: error.message });
   }
 }
 
@@ -39,11 +39,11 @@ async function listCategories(req, res) {
     const result = await categoryService.listCategories();
     res.status(200).json({
       result_code: 0,
-      message: "Success!",
+      result_msg: "Success!",
       data: result.data.rows,
     });
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    res.status(500).json({ result_msg: error.message });
   }
 }
 
