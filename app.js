@@ -8,6 +8,8 @@ const uploadRoutes = require("./routes/upload");
 const categoryRoutes = require("./routes/categoryRoutes");
 const favoriteRoutes = require("./routes/favoriteRoutes");
 const bannerRoutes = require("./routes/bannerRoutes");
+const reservationRoutes = require("./routes/reservationRoutes");
+const tableRoutes = require("./routes/tableRoutes");
 const app = express();
 
 app.use(cors());
@@ -22,6 +24,8 @@ app.use("/category", categoryRoutes);
 // app.use("/category", authenticateToken, categoryRoutes);
 app.use("/favorite", favoriteRoutes);
 app.use("/banner", bannerRoutes);
+app.use("/reservation", reservationRoutes);
+app.use("/table", tableRoutes);
 
 app.use("/uploads", express.static("uploads"));
 
