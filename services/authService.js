@@ -12,7 +12,6 @@ mongoose
   .then(() => console.log("Connected to MongoDB"))
   .catch((err) => console.error("Could not connect to MongoDB", err));
 
-
 const router = express.Router();
 const refreshTokens = [];
 
@@ -35,7 +34,7 @@ router.delete("/logout", (req, res) => {
 });
 
 router.post("/login", async (req, res) => {
-  const { uid, phoneNumber, password } = req.body;
+  const { phoneNumber, password } = req.body;
 
   try {
     const user = await User.findOne({ phoneNumber });
@@ -43,7 +42,7 @@ router.post("/login", async (req, res) => {
     if (!user || user.password !== password) {
       return res
         .status(401)
-        .json({ message: "Invalid phone number or password." });
+        .json({ result_msg: "Invalid phone number or password." });
     }
 
     const accessToken = generateAccessToken({ phoneNumber });
@@ -63,21 +62,47 @@ router.post("/login", async (req, res) => {
       },
     });
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    res.status(500).json({ result_msg: error.message });
   }
 });
 
+router.post("/update", async (req, res) => {
+  const { uid, name, phoneNumber, rid, path } = req.body;
+
+  try {
+    const user = await User.findOne({ uid });
+
+    if (!user) {
+      return res.status(404).json({ result_msg: "User not found." });
+    }
+
+    user.name = name || user.name;
+    user.phoneNumber = phoneNumber || user.phoneNumber;
+    user.rid = rid || user.rid;
+    user.path = path !== undefined ? (path !== null ? path : "") : user.path;
+
+    await user.save();
+
+    res.json({
+      result_code: 0,
+      result_msg: "User updated successfully.",
+      user,
+    });
+  } catch (error) {
+    res.status(500).json({ result_msg: error.message });
+  }
+});
 
 router.post("/register", async (req, res) => {
   const { password, name, phoneNumber } = req.body;
 
   try {
-    const uid = uuid.v4(); 
-    const user = new User({ uid, password, name, phoneNumber }); 
+    const uid = uuid.v4();
+    const user = new User({ uid, password, name, phoneNumber });
     await user.save();
-    res.status(201).json({ message: "User registered successfully." });
+    res.status(201).json({ result_msg: "User registered successfully." });
   } catch (error) {
-    res.status(400).json({ message: error.message });
+    res.status(400).json({ result_msg: error.message });
   }
 });
 

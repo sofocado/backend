@@ -6,11 +6,11 @@ const bannerController = {
       const banners = await Banner.find();
       res.status(200).json({
         result_code: 0,
-        message: "Banners fetched successfully",
+        result_msg: "Banners fetched successfully",
         data: banners,
       });
     } catch (err) {
-      res.status(500).json({ result_code: 1, message: err.message });
+      res.status(500).json({ result_code: 1, result_msg: err.message });
     }
   },
 
@@ -21,11 +21,11 @@ const bannerController = {
       await newBanner.save();
       res.status(200).json({
         result_code: 0,
-        message: "Banner added successfully",
+        result_msg: "Banner added successfully",
         data: newBanner,
       });
     } catch (err) {
-      res.status(500).json({ result_code: 1, message: err.message });
+      res.status(500).json({ result_code: 1, result_msg: err.message });
     }
   },
 
@@ -36,17 +36,17 @@ const bannerController = {
       if (!banner) {
         return res.status(404).json({
           result_code: 1,
-          message: "Banner not found",
+          result_msg: "Banner not found",
           data: null,
         });
       }
       res.status(200).json({
         result_code: 0,
-        message: "Banner fetched successfully",
+        result_msg: "Banner fetched successfully",
         data: banner,
       });
     } catch (err) {
-      res.status(500).json({ result_code: 1, message: err.message });
+      res.status(500).json({ result_code: 1, result_msg: err.message });
     }
   },
 
@@ -57,17 +57,17 @@ const bannerController = {
       if (!deletedBanner) {
         return res.status(404).json({
           result_code: 1,
-          message: "Banner not found",
+          result_msg: "Banner not found",
           data: null,
         });
       }
       res.status(200).json({
         result_code: 0,
-        message: "Banner deleted successfully",
+        result_msg: "Banner deleted successfully",
         data: null,
       });
     } catch (err) {
-      res.status(500).json({ result_code: 1, message: err.message });
+      res.status(500).json({ result_code: 1, result_msg: err.message });
     }
   },
 };
