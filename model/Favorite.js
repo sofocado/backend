@@ -1,11 +1,11 @@
 const mongoose = require("mongoose");
 
 const favoriteSchema = new mongoose.Schema({
-  userId: {
+  uid: {
     type: String,
     required: true,
   },
-  restaurantId: {
+  rid: {
     type: String,
     required: true,
   },
