@@ -2,8 +2,8 @@ const favoriteService = require("../services/favoriteService");
 
 async function addFavorite(req, res) {
   try {
-    const { userId, restaurantId } = req.body;
-    const favorite = await favoriteService.addFavorite(userId, restaurantId);
+    const { uid, rid } = req.body;
+    const favorite = await favoriteService.addFavorite(uid, rid);
     res.status(200).json({
       result_code: 0,
       result_msg: "Success!",
@@ -16,8 +16,8 @@ async function addFavorite(req, res) {
 
 async function listFavorites(req, res) {
   try {
-    const { userId } = req.body;
-    const favorites = await favoriteService.listFavorites(userId);
+    const { uid } = req.body;
+    const favorites = await favoriteService.listFavorites(uid);
     res.json({ result_code: 0, result_msg: "Success!", data: { rows: favorites } });
   } catch (error) {
     res.status(500).json({ result_code: -1, result_msg: error.message });
@@ -26,8 +26,8 @@ async function listFavorites(req, res) {
 
 async function removeFavorite(req, res) {
   try {
-    const { userId, restaurantId } = req.body;
-    await favoriteService.removeFavorite(userId, restaurantId);
+    const { uid, rid } = req.body;
+    await favoriteService.removeFavorite(uid, rid);
     res.status(200).json({ result_code: 0, result_msg: "Success!" });
   } catch (error) {
     res.status(500).json({ result_code: -1, result_msg: error.message });

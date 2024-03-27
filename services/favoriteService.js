@@ -1,12 +1,12 @@
 const Favorite = require("../model/Favorite");
 const Restaurant = require("../model/Restaurant")
 
-async function addFavorite(userId, restaurantId) {
+async function addFavorite(uid, rid) {
   try {
-    const newFavorite = new Favorite({ userId, restaurantId });
+    const newFavorite = new Favorite({ uid, rid });
     const savedFavorite = await newFavorite.save();
     await Restaurant.updateOne(
-      { rid: restaurantId },
+      { rid: rid },
       { $set: { isFavorite: 1 } }
     );
 
@@ -16,13 +16,13 @@ async function addFavorite(userId, restaurantId) {
   }
 }
 
-async function listFavorites(userId) {
+async function listFavorites(uid) {
   try {
-    const favorites = await Favorite.find({ userId });
-    const restaurantIds = favorites.map((favorite) => favorite.restaurantId);
+    const favorites = await Favorite.find({ uid });
+    const rids = favorites.map((favorite) => favorite.rid);
 
     const favoriteRestaurants = await Restaurant.find({
-      rid: { $in: restaurantIds },
+      rid: { $in: rids },
     });
 
     const favoriteRestaurantsWithFlag = favoriteRestaurants.map(
@@ -38,9 +38,9 @@ async function listFavorites(userId) {
   }
 }
 
-async function removeFavorite(userId, restaurantId) {
+async function removeFavorite(uid, rid) {
   try {
-    await Favorite.deleteOne({ userId, restaurantId });
+    await Favorite.deleteOne({ uid, rid });
   } catch (error) {
     throw error;
   }
