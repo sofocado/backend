@@ -11,7 +11,8 @@ async function addReservation(req, res) {
 
 async function listReservations(req, res) {
   try {
-    const reservations = await reservationService.listReservations();
+    const uid = req.body.uid; 
+    const reservations = await reservationService.listReservations(uid);
     res.status(200).json(reservations);
   } catch (error) {
     res.status(500).json({ result_msg: error.message });
@@ -20,7 +21,7 @@ async function listReservations(req, res) {
 
 async function deleteReservation(req, res) {
   try {
-    await reservationService.deleteReservation(req.params.id);
+    await reservationService.deleteReservation(req.body.reservationId);
     res.status(200).json({ result_msg: "Reservation deleted successfully" });
   } catch (error) {
     res.status(500).json({ result_msg: error.message });

@@ -8,20 +8,17 @@ const reservationSchema = new mongoose.Schema({
     unique: true,
     required: true,
   },
-  uid: {
-    type: String,
+  resStatus: {
+    type: Number,
     required: true,
+    default: 0,
   },
   rid: {
     type: String,
     required: true,
   },
-  countTable: {
-    type: Number,
-    required: true,
-  },
-  reservationTime: {
-    type: Number,
+  uid: {
+    type: String,
     required: true,
   },
   contacts: {
@@ -32,6 +29,26 @@ const reservationSchema = new mongoose.Schema({
   occasion: String,
   name: {
     type: String,
+    required: true,
+  },
+  tableType: {
+    type: Number,
+    required: true,
+  },
+  tid: {
+    type: String,
+    required: true,
+  },
+  tableId: {
+    type: String,
+    required: true,
+  },
+  reservationStartTime: {
+    type: Number,
+    required: true,
+  },
+  reservationEndTime: {
+    type: Number,
     required: true,
   },
   reservationCode: {
