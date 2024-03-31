@@ -3,22 +3,22 @@ const { v4: uuidv4 } = require("uuid");
 
 async function addTable(data) {
   try {
-    const { type } = data;
-    const tables = Array.from({ length: type }, () => ({
+    const { type, tableCount } = data; 
+    const tables = Array.from({ length: tableCount }, () => ({
       tableId: uuidv4(),
       status: 0,
     }));
 
     const newTable = {
       type,
-      tableCount: type,
+      tableCount, 
       tables,
     };
 
     const savedTable = await new Table(newTable).save();
     return {
       result_code: 0,
-      result_msg: "Успех!",
+      result_msg: "Success!",
       data: savedTable,
     };
   } catch (error) {
@@ -46,11 +46,10 @@ async function deleteTable(tableId) {
       throw new Error("Стол не найден");
     }
     tableDoc.tables = tableDoc.tables.filter((t) => t.tableId !== tableId);
-    tableDoc.type = tableDoc.tables.length;
     tableDoc.tableCount = tableDoc.tables.length;
     await tableDoc.save();
 
-    return { result_msg: "Стол успешно удален" };
+    return { result_msg: "Success!" };
   } catch (error) {
     throw error;
   }
