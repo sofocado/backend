@@ -4,6 +4,7 @@ const menuController = require("../controller/menuController");
 
 router.post("/add", menuController.addMenu);
 router.post("/list", menuController.listMenus);
+router.post("/get", menuController.getMenu); // Added getMenu route
 router.post("/update", menuController.updateMenu);
 router.post("/delete", menuController.deleteMenu);
 

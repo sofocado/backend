@@ -3,9 +3,8 @@ const Reservation = require("../model/Reservation");
 const Table = require("../model/Table");
 
 const updateReservationStatuses = async () => {
-  const currentTimestamp = Date.now();
+  const currentTimestamp = Math.floor(Date.now() / 1000);
 
-  // Update reservations that have ended
   const endedReservations = await Reservation.find({
     reservationEndTime: { $lt: currentTimestamp },
     resStatus: 1,
@@ -29,7 +28,6 @@ const updateReservationStatuses = async () => {
     }
   }
 
-  // Update reservations that have started but not yet ended
   const activeReservations = await Reservation.find({
     reservationStartTime: { $lte: currentTimestamp },
     reservationEndTime: { $gt: currentTimestamp },
@@ -48,15 +46,18 @@ const updateReservationStatuses = async () => {
         (t) => t.tableId === reservation.tableId
       );
       if (tableToUpdate) {
-        tableToUpdate.status = 1;
-        await table.save();
+        if (reservation.reservationStartTime <= currentTimestamp) {
+          tableToUpdate.status = 1;
+          await table.save();
+        }
       }
     }
   }
 };
 
+
 const startCronJob = () => {
-  cron.schedule("*/3 * * * *", async () => {
+  cron.schedule("*/30 * * * * *", async () => {
     console.log("Checking and updating reservation and table statuses...");
     await updateReservationStatuses();
   });

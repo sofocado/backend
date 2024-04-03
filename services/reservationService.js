@@ -3,28 +3,50 @@ const Table = require("../model/Table")
 
 async function addReservation(data) {
   try {
-    const { tid, ...reservationData } = data;
-    const table = await Table.findOne({ tid: tid, "tables.status": 0 });
-    if (!table) {
-      throw new Error("Нет доступных столов этого типа");
-    }
-    const availableTable = table.tables.find((t) => t.status === 0);
-    const reservationEndTime = reservationData.reservationStartTime + 3 * 60; // Установите правильное значение для длительности бронирования
+    const { tid, reservationStartTime } = data;
+    const reservationDuration = 5400; // Время бронирования в секундах
+    const reservationEndTime = reservationStartTime + reservationDuration;
 
-    // Создание нового бронирования с resStatus = 1
+    // Проверка наличия столов данного типа
+    const table = await Table.findOne({ tid: tid });
+    if (!table) {
+      throw new Error("Нет столов этого типа");
+    }
+
+    // Получение всех бронирований для данного типа стола
+    const reservations = await Reservation.find({ tid: tid, resStatus: 1 });
+
+    // Фильтрация свободных столов
+    const availableTables = table.tables.filter((t) => {
+      const isBooked = reservations.some((res) => {
+        return (
+          res.tableId === t.tableId &&
+          ((reservationStartTime < res.reservationEndTime &&
+            reservationStartTime >= res.reservationStartTime) ||
+            (reservationEndTime > res.reservationStartTime &&
+              reservationEndTime <= res.reservationEndTime))
+        );
+      });
+      return t.status === 0 && !isBooked;
+    });
+
+    if (availableTables.length === 0) {
+      throw new Error("Нет доступных столов");
+    }
+
+    // Выбор случайного свободного стола
+    const availableTable =
+      availableTables[Math.floor(Math.random() * availableTables.length)];
+
+    // Добавление бронирования
     const newReservation = new Reservation({
-      ...reservationData,
-      tid,
+      ...data,
       tableId: availableTable.tableId,
       reservationEndTime,
-      resStatus: 1, // Устанавливаем статус бронирования в 1
+      resStatus: 0, // Статус бронирования устанавливается в 1, означая подтвержденное бронирование
     });
 
     const savedReservation = await newReservation.save();
-
-    // Обновление статуса стола на забронированный (1)
-    availableTable.status = 1;
-    await table.save();
 
     return {
       result_code: 0,
@@ -35,7 +57,6 @@ async function addReservation(data) {
     throw error;
   }
 }
-
 
 async function listReservations(uid) {
   try {
