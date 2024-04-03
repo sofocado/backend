@@ -11,6 +11,7 @@ const favoriteRoutes = require("./routes/favoriteRoutes");
 const bannerRoutes = require("./routes/bannerRoutes");
 const reservationRoutes = require("./routes/reservationRoutes");
 const tableRoutes = require("./routes/tableRoutes");
+const menuRoutes = require("./routes/menuRoutes");
 const updateStatusReservation = require("./middleware/updateReservationStatuses");
 const app = express();
 
@@ -30,8 +31,9 @@ app.use("/favorite", favoriteRoutes);
 app.use("/banner", bannerRoutes);
 app.use("/reservation", reservationRoutes);
 app.use("/table", tableRoutes);
+app.use("/menu", menuRoutes);
 
-app.use("/uploads", express.static("uploads"));
+// app.use("/uploads", express.static("uploads"));
 
 app.get("/posts", authenticateToken, (req, res) => {
   res.json(posts.filter((post) => post.username === req.user.name));

@@ -4,8 +4,12 @@ const { v4: uuidv4 } = require("uuid");
 const menuSchema = new mongoose.Schema({
   menuId: {
     type: String,
-    type: uuidv4,
+    default: uuidv4,
     unique: true,
+    required: true,
+  },
+  rid: {
+    type: String,
     required: true,
   },
   name: {
