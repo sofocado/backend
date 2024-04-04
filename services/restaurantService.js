@@ -2,17 +2,11 @@ const Restaurant = require("../model/Restaurant");
 
 async function addRestaurant(data) {
   try {
-    const savedRestaurant = await new Restaurant(data).save();
-    return {
-      result_code: 0,
-      result_msg: "Success!",
-      data: savedRestaurant,
-    };
+    return await new Restaurant(data).save();
   } catch (error) {
     throw error;
   }
 }
-
 
 async function listRestaurants(filters) {
   try {
@@ -27,13 +21,7 @@ async function listRestaurants(filters) {
     }
 
     const restaurants = await Restaurant.find(query);
-    return {
-      result_code: 0,
-      result_msg: "Success!",
-      data: {
-        rows: restaurants,
-      },
-    };
+    return restaurants;
   } catch (error) {
     throw error;
   }
@@ -45,11 +33,7 @@ async function getRestaurantByRid(rid) {
     if (!restaurant) {
       throw new Error("Restaurant not found");
     }
-    return {
-      result_code: 0,
-      result_msg: "Success!",
-      data: restaurant,
-    };
+    return restaurant;
   } catch (error) {
     throw error;
   }
@@ -57,27 +41,17 @@ async function getRestaurantByRid(rid) {
 
 async function updateRestaurant(rid, data) {
   try {
-    const restaurant = await Restaurant.findOne({ rid: rid });
+    const restaurant = await Restaurant.findOneAndUpdate({ rid: rid }, data, {
+      new: true,
+    });
     if (!restaurant) {
       throw new Error("Restaurant not found");
     }
-    for (const key in data) {
-      if (data.hasOwnProperty(key)) {
-        restaurant[key] = data[key];
-      }
-    }
-    await restaurant.save();
-
-    return {
-      result_code: 0,
-      result_msg: "Success!",
-      data: restaurant,
-    };
+    return restaurant;
   } catch (error) {
     throw error;
   }
 }
-
 
 module.exports = {
   addRestaurant,

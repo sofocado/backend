@@ -1,47 +1,32 @@
 const Category = require("../model/Category");
 
-exports.addCategory = async (name) => {
+async function addCategory(name) {
   try {
     const category = new Category({ name });
-    const savedCategory = await category.save();
-    return {
-      result_code: 0,
-      result_msg: "Success!",
-      data: {
-        rows: savedCategory,
-      },
-    };
+    return await category.save();
   } catch (error) {
     throw error;
   }
 };
 
-exports.deleteCategory = async (cid) => {
+async function deleteCategory(cid) {
   try {
-    const deletedCategory = await Category.findOneAndDelete({ cid });
-    return {
-      result_code: 0,
-      result_msg: "Success!",
-      data: {
-        rows: deletedCategory,
-      },
-    };
+    return await Category.findOneAndDelete({ cid });
   } catch (error) {
     throw error;
   }
 };
 
-exports.listCategories = async () => {
+async function listCategories() {
   try {
-    const categories = await Category.find();
-    return {
-      result_code: 0,
-      result_msg: "Success!",
-      data: {
-        rows: categories,
-      },
-    };
+    return await Category.find();
   } catch (error) {
     throw error;
   }
+};
+
+module.exports = {
+  addCategory,
+  deleteCategory,
+  listCategories,
 };
