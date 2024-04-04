@@ -2,7 +2,6 @@ require("dotenv").config();
 const express = require("express");
 const cors = require("cors");
 const { authenticateToken } = require("./middleware/authMiddleware");
-// const tableStatusUpdater = require("./middleware/tableStatusUpdater");
 const authRoutes = require("./routes/authRoutes");
 const restaurantRoutes = require("./routes/restaurantRoutes");
 const uploadRoutes = require("./routes/upload");
@@ -12,6 +11,7 @@ const bannerRoutes = require("./routes/bannerRoutes");
 const reservationRoutes = require("./routes/reservationRoutes");
 const tableRoutes = require("./routes/tableRoutes");
 const menuRoutes = require("./routes/menuRoutes");
+const reviewRoutes = require("./routes/reviewRoutes");
 const updateStatusReservation = require("./middleware/updateReservationStatuses");
 const app = express();
 
@@ -19,7 +19,6 @@ app.use(cors());
 app.use(express.json());
 
 const posts = {};
-// tableStatusUpdater();
 updateStatusReservation();
 
 app.use("/auth", authRoutes);
@@ -32,6 +31,7 @@ app.use("/banner", bannerRoutes);
 app.use("/reservation", reservationRoutes);
 app.use("/table", tableRoutes);
 app.use("/menu", menuRoutes);
+app.use("/review", reviewRoutes);
 
 // app.use("/uploads", express.static("uploads"));
 
