@@ -13,8 +13,8 @@ async function addMenu(req, res) {
 
 async function listMenus(req, res) {
   try {
-    const { rid } = req.body;
-    const menus = await menuService.listMenus(rid);
+    const { rid, filter } = req.body;
+    const menus = await menuService.listMenus(rid, filter);
     res
       .status(200)
       .json({

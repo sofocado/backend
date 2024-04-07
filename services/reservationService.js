@@ -58,9 +58,13 @@ async function addReservation(data) {
   }
 }
 
-async function listReservations(uid) {
+async function listReservations(uid, rid) {
   try {
-    const reservations = await Reservation.find({ uid: uid });
+    let query = { uid: uid }; 
+    if (rid !== null && rid !== undefined) {
+      query.rid = rid;
+    }
+    const reservations = await Reservation.find( query );
     return {
       result_code: 0,
       result_msg: "Success!",

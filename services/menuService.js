@@ -5,10 +5,20 @@ async function addMenu(data) {
   return savedMenu;
 }
 
-async function listMenus(rid) {
-  const menus = await Menu.find({ rid: rid });
+async function listMenus(rid, filter) {
+  let query = { rid: rid };
+  if (filter) {
+    if (filter.keyWord) {
+      query.name = { $regex: filter.keyWord, $options: "i" };
+    }
+    if (filter.categoryName) {
+      query.category = filter.categoryName;
+    }
+  }
+  const menus = await Menu.find(query);
   return menus;
 }
+
 
 async function getMenu(menuId) {
   const menu = await Menu.findOne({ menuId: menuId });
