@@ -13,11 +13,15 @@ async function addMenu(req, res) {
 
 async function listMenus(req, res) {
   try {
-    const { rid } = req.body;
-    const menus = await menuService.listMenus(rid); 
+    const { rid, filter } = req.body;
+    const menus = await menuService.listMenus(rid, filter);
     res
       .status(200)
-      .json({ result_code: 0, result_msg: "Success!", data: { rows: menus } });
+      .json({
+        result_code: 0,
+        result_msg: "Success!",
+        data: { recordcount: menus.length, rows: menus },
+      });
   } catch (error) {
     res.status(500).json({ result_msg: error.message });
   }

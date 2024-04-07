@@ -18,7 +18,7 @@ async function listFavorites(req, res) {
   try {
     const { uid } = req.body;
     const favorites = await favoriteService.listFavorites(uid);
-    res.json({ result_code: 0, result_msg: "Success!", data: { rows: favorites } });
+    res.json({ result_code: 0, result_msg: "Success!", data: { recordcount: favorites.length, rows: favorites } });
   } catch (error) {
     res.status(500).json({ result_code: -1, result_msg: error.message });
   }

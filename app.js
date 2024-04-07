@@ -33,7 +33,7 @@ app.use("/table", tableRoutes);
 app.use("/menu", menuRoutes);
 app.use("/review", reviewRoutes);
 
-// app.use("/uploads", express.static("uploads"));
+app.use("/uploads", express.static("uploads"));
 
 app.get("/posts", authenticateToken, (req, res) => {
   res.json(posts.filter((post) => post.username === req.user.name));

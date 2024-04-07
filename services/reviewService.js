@@ -29,7 +29,8 @@ async function addReview(data) {
     }
 
     review.reviews.push(reviewData); // Add the new review to the array
-    return await review.save();
+    await review.save();
+    return reviewData;
   } else {
     // Create a new review document
     const newReview = new Review({
@@ -44,10 +45,10 @@ async function addReview(data) {
       },
       reviews: [reviewData],
     });
-    return await newReview.save();
+    await newReview.save();
+    return reviewData;
   }
 }
-
 
 async function listReviews(rid) {
   const reviews = await Review.find({ rid: rid });
@@ -55,11 +56,11 @@ async function listReviews(rid) {
     (acc, review) => acc + review.reviews.length,
     0
   );
-  return { recordcount: recordcount, rows: reviews };
+  return { recordcount, rows: reviews };
 }
 
 async function deleteReview(uid, reviewId) {
-  const review = await Review.findOne({ reviewId: reviewId });
+  const review = await Review.findOne({ reviewId });
   if (!review) {
     throw new Error("Review not found");
   }
@@ -86,7 +87,6 @@ async function deleteReview(uid, reviewId) {
   await review.save();
   return { message: "Review deleted successfully" };
 }
-
 
 module.exports = {
   addReview,

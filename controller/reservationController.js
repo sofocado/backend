@@ -12,7 +12,8 @@ async function addReservation(req, res) {
 async function listReservations(req, res) {
   try {
     const uid = req.body.uid; 
-    const reservations = await reservationService.listReservations(uid);
+    const rid = req.body.rid;
+    const reservations = await reservationService.listReservations(uid, rid);
     res.status(200).json(reservations);
   } catch (error) {
     res.status(500).json({ result_msg: error.message });
