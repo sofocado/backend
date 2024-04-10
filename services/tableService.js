@@ -3,7 +3,7 @@ const { v4: uuidv4 } = require("uuid");
 
 async function addTable(data) {
   try {
-    const { type, tableCount } = data; 
+    const { type, tableCount, rid } = data; 
     const tables = Array.from({ length: tableCount }, () => ({
       tableId: uuidv4(),
       status: 0,
@@ -11,7 +11,8 @@ async function addTable(data) {
 
     const newTable = {
       type,
-      tableCount, 
+      tableCount,
+      rid,
       tables,
     };
 
@@ -26,9 +27,10 @@ async function addTable(data) {
   }
 }
 
-async function listTables() {
+async function listTables(tableData) {
   try {
-    const tables = await Table.find();
+    const { rid } = tableData;
+    const tables = await Table.find({ rid });
     return {
       result_code: 0,
       result_msg: "Success!",

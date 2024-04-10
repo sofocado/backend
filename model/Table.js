@@ -2,6 +2,10 @@ const mongoose = require("mongoose");
 const { v4: uuidv4 } = require("uuid");
 
 const tableSchema = new mongoose.Schema({
+  rid: {
+    type: String,
+    required: true,
+  },
   tid: {
     type: String,
     default: uuidv4,
