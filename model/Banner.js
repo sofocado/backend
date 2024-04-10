@@ -8,6 +8,14 @@ const bannerSchema = new mongoose.Schema({
     unique: true,
   },
   path: String,
+  startTime: {
+    type: Number,
+    required: true,
+  },
+  endTime: {
+    type: Number,
+    required: true,
+  },
 });
 
 const Banner = mongoose.model("Banner", bannerSchema);

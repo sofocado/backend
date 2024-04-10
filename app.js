@@ -12,6 +12,7 @@ const reservationRoutes = require("./routes/reservationRoutes");
 const tableRoutes = require("./routes/tableRoutes");
 const menuRoutes = require("./routes/menuRoutes");
 const reviewRoutes = require("./routes/reviewRoutes");
+const menuCategoryRoutes = require("./routes/menuCategoryRoutes");
 const updateStatusReservation = require("./middleware/updateReservationStatuses");
 const app = express();
 
@@ -31,6 +32,7 @@ app.use("/banner", bannerRoutes);
 app.use("/reservation", reservationRoutes);
 app.use("/table", tableRoutes);
 app.use("/menu", menuRoutes);
+app.use("/menu/category", menuCategoryRoutes);
 app.use("/review", reviewRoutes);
 
 app.use("/uploads", express.static("uploads"));

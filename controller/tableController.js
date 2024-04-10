@@ -11,7 +11,8 @@ async function addTable(req, res) {
 
 async function listTables(req, res) {
   try {
-    const tables = await tableService.listTables();
+    const { rid } = req.body;
+    const tables = await tableService.listTables({ rid });
     res.status(200).json(tables);
   } catch (error) {
     res.status(500).json({ result_msg: error.message });
