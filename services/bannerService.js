@@ -1,17 +1,17 @@
 const Banner = require("../model/Banner");
 
 const bannerService = {
-  async getAllBanners() {
-    return await Banner.find();
+  async getAllBanners(rid) {
+    return await Banner.find({ rid: rid });
   },
 
-  async addBanner(path, startTime, endTime) {
-    const newBanner = new Banner({ path, startTime, endTime });
+  async addBanner(rid, path, startTime, endTime) {
+    const newBanner = new Banner({ rid, path, startTime, endTime });
     return await newBanner.save();
   },
 
-  async getBannerById(id) {
-    return await Banner.findOne({ bannerId: id });
+  async getBannerByQuery(query) {
+    return await Banner.findOne(query);
   },
 
   async deleteBannerById(id) {

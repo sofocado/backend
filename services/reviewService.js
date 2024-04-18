@@ -1,5 +1,16 @@
 const Review = require("../model/Review");
 const User = require("../model/User");
+const Restaurant = require("../model/Restaurant");
+
+async function calculateTotalRating(rid) {
+  const reviews = await Review.find({ rid: rid });
+  const totalReviews = reviews.length;
+  const totalRating = reviews.reduce(
+    (acc, review) => acc + review.avgRate.totalRate,
+    0
+  );
+  return totalReviews > 0 ? totalRating / totalReviews : 0;
+}
 
 async function addReview(data) {
   const user = await User.findOne({ uid: data.uid });
@@ -15,12 +26,11 @@ async function addReview(data) {
 
   const review = await Review.findOne({ rid: reviewData.rid });
   if (review) {
-    const totalReviews = review.reviews.length + 1; // Including the new review
+    const totalReviews = review.reviews.length + 1; 
     review.avgRate.totalRate =
       (review.avgRate.totalRate * review.reviews.length + reviewData.rating) /
       totalReviews;
 
-    // Increment the corresponding rating count
     if (reviewData.rating >= 1 && reviewData.rating <= 5) {
       const ratingKey = ["one", "two", "three", "four", "five"][
         reviewData.rating - 1
@@ -28,11 +38,18 @@ async function addReview(data) {
       review.avgRate[ratingKey] += 1;
     }
 
-    review.reviews.push(reviewData); // Add the new review to the array
+    review.reviews.push(reviewData); 
     await review.save();
+
+    const totalRating = await calculateTotalRating(reviewData.rid);
+    await Restaurant.findOneAndUpdate(
+      { rid: reviewData.rid },
+      { rating: totalRating },
+      { new: true }
+    );
+
     return reviewData;
   } else {
-    // Create a new review document
     const newReview = new Review({
       rid: reviewData.rid,
       avgRate: {
@@ -46,6 +63,14 @@ async function addReview(data) {
       reviews: [reviewData],
     });
     await newReview.save();
+
+    const totalRating = await calculateTotalRating(reviewData.rid);
+    await Restaurant.findOneAndUpdate(
+      { rid: reviewData.rid },
+      { rating: totalRating },
+      { new: true }
+    );
+
     return reviewData;
   }
 }
@@ -69,8 +94,6 @@ async function deleteReview(uid, reviewId) {
   if (reviewIndex === -1) {
     throw new Error("Review not found for the given user");
   }
-
-  // Remove the review and update the ratings
   const removedReview = review.reviews.splice(reviewIndex, 1)[0];
   const ratingKey = ["one", "two", "three", "four", "five"][
     removedReview.rating - 1
