@@ -22,8 +22,8 @@ router.post("/token", (req, res) => {
 
   jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET, (err, user) => {
     if (err) return res.sendStatus(403);
-    const accessToken = generateAccessToken({ username: user.username });
-    res.json({ accessToken });
+    const accessToken = generateAccessToken({ phoneNumber: user.phoneNumber });
+    res.json({ result_code: 0, data: accessToken });
   });
 });
 
@@ -67,7 +67,7 @@ router.post("/login", async (req, res) => {
 });
 
 router.post("/update", async (req, res) => {
-  const { uid, name, phoneNumber, rid, path } = req.body;
+  const { uid, name, phoneNumber, rid, path, password } = req.body;
 
   try {
     const user = await User.findOne({ uid });
@@ -80,6 +80,11 @@ router.post("/update", async (req, res) => {
     user.phoneNumber = phoneNumber || user.phoneNumber;
     user.rid = rid || user.rid;
     user.path = path !== undefined ? (path !== null ? path : "") : user.path;
+
+    // Если пароль передается в запросе, обновляем его
+    if (password) {
+      user.password = password;
+    }
 
     await user.save();
 
@@ -100,7 +105,7 @@ router.post("/register", async (req, res) => {
     const uid = uuid.v4();
     const user = new User({ uid, password, name, phoneNumber });
     await user.save();
-    res.status(201).json({ result_msg: "User registered successfully." });
+    res.status(201).json({ result_code: 0, result_msg: "User registered successfully." });
   } catch (error) {
     res.status(400).json({ result_msg: error.message });
   }
@@ -108,6 +113,7 @@ router.post("/register", async (req, res) => {
 
 function generateAccessToken(user) {
   return jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, { expiresIn: "1h" });
+  // return jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, { expiresIn: "30s" });
 }
 
 module.exports = router;

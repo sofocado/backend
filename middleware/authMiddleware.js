@@ -19,6 +19,7 @@ function authenticateToken(req, res, next) {
         phoneNumber: user.phoneNumber,
       });
       if (!existingUser) {
+        console.log('User not found')
         return res.sendStatus(403);
       }
       req.user = existingUser;

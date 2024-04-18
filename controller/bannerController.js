@@ -4,10 +4,11 @@ const bannerService = require("../services/bannerService");
 const bannerController = {
   async list(req, res) {
     try {
-      const banners = await bannerService.getAllBanners();
+      const rid = req.body.rid;
+      const banners = await bannerService.getAllBanners(rid);
       res.status(200).json({
         result_code: 0,
-        result_msg: "Banners fetched successfully",
+        result_msg: "Success!",
         data: { recordcount: banners.length, rows: banners },
       });
     } catch (err) {
@@ -17,11 +18,16 @@ const bannerController = {
 
   async add(req, res) {
     try {
-      const { path, startTime, endTime } = req.body;
-      const newBanner = await bannerService.addBanner(path, startTime, endTime);
+      const { rid, path, startTime, endTime } = req.body;
+      const newBanner = await bannerService.addBanner(
+        rid,
+        path,
+        startTime,
+        endTime
+      );
       res.status(200).json({
         result_code: 0,
-        result_msg: "Banner added successfully",
+        result_msg: "Success!",
         data: newBanner,
       });
     } catch (err) {
@@ -31,18 +37,33 @@ const bannerController = {
 
   async get(req, res) {
     try {
-      const { bannerId } = req.body;
-      const banner = await bannerService.getBannerById(bannerId);
+      const { rid, bannerId } = req.body;
+      let query = {};
+      if (rid && bannerId) {
+        query = { rid: rid, bannerId: bannerId };
+      } else if (rid) {
+        query = { rid: rid };
+      } else if (bannerId) {
+        query = { bannerId: bannerId };
+      } else {
+        return res.status(400).json({
+          result_code: 0,
+          result_msg: "Both rid and bannerId are required",
+          data: null,
+        });
+      }
+
+      const banner = await bannerService.getBannerByQuery(query);
       if (!banner) {
         return res.status(404).json({
-          result_code: 1,
+          result_code: 0,
           result_msg: "Banner not found",
           data: null,
         });
       }
       res.status(200).json({
         result_code: 0,
-        result_msg: "Banner fetched successfully",
+        result_msg: "Success!",
         data: banner,
       });
     } catch (err) {
@@ -52,11 +73,11 @@ const bannerController = {
 
   async delete(req, res) {
     try {
-      const { bannerId } = req.body;
+      const bannerId = req.body.bannerId;
       const deletedBanner = await bannerService.deleteBannerById(bannerId);
       if (!deletedBanner) {
         return res.status(404).json({
-          result_code: 1,
+          result_code: 0,
           result_msg: "Banner not found",
           data: null,
         });
@@ -64,7 +85,6 @@ const bannerController = {
       res.status(200).json({
         result_code: 0,
         result_msg: "Banner deleted successfully",
-        data: null,
       });
     } catch (err) {
       res.status(500).json({ result_code: 1, result_msg: err.message });

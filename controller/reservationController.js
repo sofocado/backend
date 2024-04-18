@@ -23,7 +23,7 @@ async function listReservations(req, res) {
 async function deleteReservation(req, res) {
   try {
     await reservationService.deleteReservation(req.body.reservationId);
-    res.status(200).json({ result_msg: "Reservation deleted successfully" });
+    res.status(200).json({ result_code: 0, result_msg: "Reservation deleted successfully" });
   } catch (error) {
     res.status(500).json({ result_msg: error.message });
   }

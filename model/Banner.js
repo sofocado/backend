@@ -7,6 +7,7 @@ const bannerSchema = new mongoose.Schema({
     default: uuidv4,
     unique: true,
   },
+  rid: String,
   path: String,
   startTime: {
     type: Number,

@@ -13,6 +13,9 @@ const tableRoutes = require("./routes/tableRoutes");
 const menuRoutes = require("./routes/menuRoutes");
 const reviewRoutes = require("./routes/reviewRoutes");
 const menuCategoryRoutes = require("./routes/menuCategoryRoutes");
+const orderRoutes = require("./routes/orderRoutes");
+const cardRoutes = require("./routes/cardRoutes");
+
 const updateStatusReservation = require("./middleware/updateReservationStatuses");
 const app = express();
 
@@ -34,6 +37,8 @@ app.use("/table", tableRoutes);
 app.use("/menu", menuRoutes);
 app.use("/menu/category", menuCategoryRoutes);
 app.use("/review", reviewRoutes);
+app.use("/order", orderRoutes);
+app.use("/card", cardRoutes);
 
 app.use("/uploads", express.static("uploads"));
 

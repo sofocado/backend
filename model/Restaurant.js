@@ -18,12 +18,15 @@ const restaurantSchema = new mongoose.Schema({
   workendtime: Number,
   category: String,
   countTable: Number,
+  rating: {
+    type: Number,
+    default: 0
+  },
   path: String,
   phone: String,
   avgCheque: Number,
   parking: { type: Number, default: 0 },
   prayingRoom: { type: Number, default: 0 },
-  rating: Number,
 });
 
 const Restaurant = mongoose.model("Restaurant", restaurantSchema);

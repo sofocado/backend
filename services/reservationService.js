@@ -60,15 +60,23 @@ async function addReservation(data) {
 
 async function listReservations(uid, rid) {
   try {
-    let query = { uid: uid }; 
-    if (rid !== null && rid !== undefined) {
+    let query = {}; 
+
+    if (uid !== null && uid !== "") {
+      query.uid = uid
+    }
+
+    if (rid !== null && rid !== "") {
       query.rid = rid;
     }
     const reservations = await Reservation.find( query );
     return {
       result_code: 0,
       result_msg: "Success!",
-      data: reservations,
+      data: {
+        recordcount: reservations.length,
+        rows: reservations,
+      },
     };
   } catch (error) {
     throw error;
