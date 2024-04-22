@@ -4,7 +4,7 @@ const bannerService = require("../services/bannerService");
 const bannerController = {
   async list(req, res) {
     try {
-      const rid = req.body.rid;
+      const rid = req.body.rid || null;
       const banners = await bannerService.getAllBanners(rid);
       res.status(200).json({
         result_code: 0,

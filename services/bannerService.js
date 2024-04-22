@@ -2,7 +2,8 @@ const Banner = require("../model/Banner");
 
 const bannerService = {
   async getAllBanners(rid) {
-    return await Banner.find({ rid: rid });
+    const query = rid ? { rid: rid } : {};
+    return await Banner.find(query);
   },
 
   async addBanner(rid, path, startTime, endTime) {
