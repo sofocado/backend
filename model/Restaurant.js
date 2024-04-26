@@ -20,9 +20,9 @@ const restaurantSchema = new mongoose.Schema({
   countTable: Number,
   rating: {
     type: Number,
-    default: 0
+    default: 0,
   },
-  path: String,
+  path: [String],
   phone: String,
   avgCheque: Number,
   parking: { type: Number, default: 0 },

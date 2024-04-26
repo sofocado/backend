@@ -13,7 +13,12 @@ async function listReservations(req, res) {
   try {
     const uid = req.body.uid; 
     const rid = req.body.rid;
-    const reservations = await reservationService.listReservations(uid, rid);
+    const sort = req.body.sort || [];
+    const reservations = await reservationService.listReservations(
+      uid,
+      rid,
+      sort
+    );
     res.status(200).json(reservations);
   } catch (error) {
     res.status(500).json({ result_msg: error.message });

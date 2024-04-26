@@ -15,6 +15,7 @@ const reviewRoutes = require("./routes/reviewRoutes");
 const menuCategoryRoutes = require("./routes/menuCategoryRoutes");
 const orderRoutes = require("./routes/orderRoutes");
 const cardRoutes = require("./routes/cardRoutes");
+const transactionRoutes = require("./routes/transactionRoutes");
 
 const updateStatusReservation = require("./middleware/updateReservationStatuses");
 const app = express();
@@ -27,7 +28,6 @@ updateStatusReservation();
 
 app.use("/auth", authRoutes);
 app.use("/restaurant", restaurantRoutes);
-app.use("/upload", uploadRoutes);
 app.use("/category", categoryRoutes);
 // app.use("/category", authenticateToken, categoryRoutes);
 app.use("/favorite", favoriteRoutes);
@@ -39,7 +39,9 @@ app.use("/menu/category", menuCategoryRoutes);
 app.use("/review", reviewRoutes);
 app.use("/order", orderRoutes);
 app.use("/card", cardRoutes);
+app.use("/transaction", transactionRoutes);
 
+app.use("/upload", uploadRoutes);
 app.use("/uploads", express.static("uploads"));
 
 app.get("/posts", authenticateToken, (req, res) => {

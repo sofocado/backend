@@ -1,8 +1,9 @@
+// transactionModel.js
 const mongoose = require("mongoose");
 const { v4: uuidv4 } = require("uuid");
 
-const cardSchema = new mongoose.Schema({
-  cardId: {
+const transactionSchema = new mongoose.Schema({
+  transactionId: {
     type: String,
     default: uuidv4,
     unique: true,
@@ -12,29 +13,28 @@ const cardSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  fullname: {
+  rid: {
     type: String,
     required: true,
   },
-  cardNumber: {
-    type: Number,
-    required: true,
-  },
-  validthru: {
+  cardId: {
     type: String,
     required: true,
   },
-  cvv: {
+  orderId: {
+    type: String,
+    required: true,
+  },
+  amount: {
     type: Number,
     required: true,
   },
-  account: {
+  createTime: {
     type: Number,
-    default: 999999,
-    required: true,
+    default: Math.floor(Date.now() / 1000),
   },
 });
 
-const Card = mongoose.model("Card", cardSchema);
+const Transaction = mongoose.model("Transaction", transactionSchema);
 
-module.exports = Card;
+module.exports = Transaction;

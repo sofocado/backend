@@ -16,8 +16,8 @@ async function addRestaurant(req, res) {
 async function listRestaurants(req, res) {
   try {
     const filters = {
-      keyword: req.body.keyword,
-      categorySort: req.body.categorySort,
+      sort: req.body.sort || [],
+      filter: req.body.filter || {}, 
     };
 
     const restaurants = await restaurantService.listRestaurants(filters);

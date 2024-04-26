@@ -4,7 +4,7 @@ const Table = require("../model/Table")
 async function addReservation(data) {
   try {
     const { tid, reservationStartTime } = data;
-    const reservationDuration = 5400; // Время бронирования в секундах
+    const reservationDuration = 5940; // Время бронирования в секундах
     const reservationEndTime = reservationStartTime + reservationDuration;
 
     // Проверка наличия столов данного типа
@@ -58,18 +58,24 @@ async function addReservation(data) {
   }
 }
 
-async function listReservations(uid, rid) {
+async function listReservations(uid, rid, sort) {
   try {
-    let query = {}; 
+    let query = {};
 
     if (uid !== null && uid !== "") {
-      query.uid = uid
+      query.uid = uid;
     }
 
     if (rid !== null && rid !== "") {
       query.rid = rid;
     }
-    const reservations = await Reservation.find( query );
+
+    const sortOptions = {};
+    sort.forEach((sortObj) => {
+      sortOptions[sortObj.key] = sortObj.isAsc === 0 ? 1 : -1;
+    });
+
+    const reservations = await Reservation.find(query).sort(sortOptions);
     return {
       result_code: 0,
       result_msg: "Success!",

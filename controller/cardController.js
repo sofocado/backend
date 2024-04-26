@@ -2,8 +2,8 @@ const cardService = require("../services/cardService");
 
 async function addCard(req, res) {
   try {
-    const { uid, cardNumber, validthru, cvv } = req.body;
-    const card = await cardService.addCard({ uid, cardNumber, validthru, cvv });
+    const { uid, cardNumber, validthru, cvv, fullname } = req.body;
+    const card = await cardService.addCard({ uid, cardNumber, validthru, cvv, fullname });
     res
       .status(200)
       .json({ result_code: 0, result_msg: "Success!", data: card });

@@ -1,8 +1,8 @@
 const Card = require("../model/Card");
 
-async function addCard({ uid, cardNumber, validthru, cvv }) {
+async function addCard({ uid, cardNumber, validthru, cvv, fullname }) {
   try {
-    const card = new Card({ uid, cardNumber, validthru, cvv });
+    const card = new Card({ uid, cardNumber, validthru, cvv, fullname });
     return await card.save();
   } catch (error) {
     throw new Error(error.message);
