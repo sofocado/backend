@@ -11,16 +11,33 @@ async function addRestaurant(data) {
 async function listRestaurants(filters) {
   try {
     let query = {};
+    if (filters.filter) {
+      if (filters.filter.keyword) {
+        query.name = { $regex: filters.filter.keyword, $options: "i" };
+      }
 
-    if (filters.keyword) {
-      query.name = { $regex: filters.keyword, $options: "i" };
+      if (
+        filters.filter.category !== undefined &&
+        filters.filter.category !== ""
+      ) {
+        query.category = filters.filter.category;
+      }
+
+      if (filters.filter.parking !== undefined) {
+        query.parking = parseInt(filters.filter.parking);
+      }
+
+      if (filters.filter.praingRoom !== undefined) {
+        query.prayingRoom = parseInt(filters.filter.praingRoom);
+      }
     }
 
-    if (filters.categorySort !== undefined && filters.categorySort !== "") {
-      query.category = filters.categorySort;
-    }
+    const sortOptions = {};
+    filters.sort.forEach((sortObj) => {
+      sortOptions[sortObj.key] = sortObj.isAsc === 0 ? 1 : -1;
+    });
 
-    const restaurants = await Restaurant.find(query);
+    const restaurants = await Restaurant.find(query).sort(sortOptions);
     return restaurants;
   } catch (error) {
     throw error;

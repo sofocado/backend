@@ -31,6 +31,10 @@ const reservationSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  orderId: {
+    type: String,
+    default: null,
+  },
   tableType: {
     type: Number,
     required: true,

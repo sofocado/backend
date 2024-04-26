@@ -1,4 +1,3 @@
-// bannerController.js
 const bannerService = require("../services/bannerService");
 
 const bannerController = {
