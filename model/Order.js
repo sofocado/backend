@@ -16,21 +16,25 @@ const orderSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  menuId: {
-    type: String,
-    required: true,
-  },
-  quantity: {
-    type: Number,
-    required: true,
-  },
+  menu: [
+    {
+      type: String, 
+      required: true,
+    },
+  ],
+  quantity: [
+    {
+      type: Number,
+      required: true,
+    },
+  ],
   total: {
     type: Number,
     required: true,
   },
   createTime: {
-    type: Number, 
-    default: Math.floor(Date.now() / 1000), 
+    type: Number,
+    default: Math.floor(Date.now() / 1000),
   },
 });
 
