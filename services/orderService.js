@@ -14,14 +14,30 @@ async function calculateTotal(menuId, quantity) {
   }
 }
 
-async function addOrder(uid, menuId, quantity, rid) {
+async function addOrder(uid, menuItems, quantities, rid) {
   try {
-    const menu = await Menu.findOne({ menuId });
-    if (!menu) {
-      throw new Error("Menu item not found");
+    if (menuItems.length !== quantities.length) {
+      throw new Error(
+        "Menu items and quantities arrays must be of the same length"
+      );
     }
-    const total = await calculateTotal(menuId, quantity);
-    const order = new Order({ uid, menuId, quantity, total, rid });
+    let total = 0;
+    for (let i = 0; i < menuItems.length; i++) {
+      const menuId = menuItems[i];
+      const quantity = quantities[i];
+      const menu = await Menu.findOne({ menuId });
+      if (!menu) {
+        throw new Error(`Menu item ${menuId} not found`);
+      }
+      total += menu.price * quantity;
+    }
+    const order = new Order({
+      uid,
+      menu: menuItems,
+      quantity: quantities,
+      total,
+      rid,
+    });
     const savedOrder = await order.save();
     return savedOrder;
   } catch (error) {
@@ -39,7 +55,33 @@ async function listOrders(uid, rid) {
       query.rid = rid;
     }
     const orders = await Order.find(query);
-    return orders;
+
+    const ordersWithMenuData = await Promise.all(
+      orders.map(async (order) => {
+        const menuData = await Promise.all(
+          order.menu.map(async (menuId) => {
+            const menu = await Menu.findOne({ menuId });
+            if (!menu) {
+              throw new Error(`Menu item ${menuId} not found`);
+            }
+            return {
+              menuId: menu.menuId,
+              name: menu.name,
+              ingredient: menu.ingredient,
+              category: menu.category,
+              path: menu.path,
+              price: menu.price,
+            };
+          })
+        );
+        return {
+          ...order.toObject(),
+          menu: menuData,
+        };
+      })
+    );
+
+    return ordersWithMenuData;
   } catch (error) {
     throw new Error(error.message);
   }
