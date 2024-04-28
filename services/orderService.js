@@ -94,6 +94,7 @@ async function deleteOrder(orderId) {
     throw new Error(error.message);
   }
 }
+
 async function getOrder(uid, rid, orderId) {
   try {
     let query = { orderId };
@@ -107,11 +108,34 @@ async function getOrder(uid, rid, orderId) {
     if (!order) {
       throw new Error("Order not found");
     }
-    return order;
+    const menuData = await Promise.all(
+      order.menu.map(async (menuId) => {
+        const menu = await Menu.findOne({ menuId });
+        if (!menu) {
+          throw new Error(`Menu item ${menuId} not found`);
+        }
+        return {
+          menuId: menu.menuId,
+          name: menu.name,
+          ingredient: menu.ingredient,
+          category: menu.category,
+          path: menu.path,
+          price: menu.price,
+        };
+      })
+    );
+
+    const orderWithMenuData = {
+      ...order.toObject(),
+      menu: menuData,
+    };
+
+    return orderWithMenuData;
   } catch (error) {
     throw new Error(error.message);
   }
 }
+
 
 module.exports = {
   calculateTotal,
