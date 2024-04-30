@@ -9,7 +9,7 @@ async function addRestaurant(req, res) {
       data: restaurant,
     });
   } catch (error) {
-    res.status(400).json({ result_msg: error.message });
+    res.status(400).json({ result_code: -1, result_msg: error.message });
   }
 }
 
@@ -46,7 +46,7 @@ async function getRestaurant(req, res) {
       data: restaurant,
     });
   } catch (error) {
-    res.status(404).json({ result_msg: error.message });
+    res.status(404).json({ result_code: -3, result_msg: error.message });
   }
 }
 

@@ -4,7 +4,7 @@ async function addCategory(req, res) {
   try {
     const { name } = req.body;
     if (!name) {
-      return res.status(400).json({ error: "Name is required" });
+      return res.status(400).json({ result_code: -1, result_msg: error.message });
     }
 
     const category = await categoryService.addCategory(name);
@@ -14,7 +14,7 @@ async function addCategory(req, res) {
       data: { rows: category },
     });
   } catch (error) {
-    res.status(400).json({ result_msg: error.message });
+    res.status(400).json({ result_code: -1, result_msg: error.message });
   }
 }
 
@@ -23,7 +23,9 @@ async function deleteCategory(req, res) {
     const { cid } = req.body;
     const category = await categoryService.deleteCategory(cid);
     if (!category) {
-      return res.status(404).json({ error: "Category not found" });
+      return res
+        .status(404)
+        .json({ result_code: -3, result_msg: error.message });
     }
     res.status(200).json({
       result_code: 0,

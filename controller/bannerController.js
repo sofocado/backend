@@ -11,7 +11,7 @@ const bannerController = {
         data: { recordcount: banners.length, rows: banners },
       });
     } catch (err) {
-      res.status(500).json({ result_code: 1, result_msg: err.message });
+      res.status(500).json({ result_msg: err.message });
     }
   },
 
@@ -30,7 +30,7 @@ const bannerController = {
         data: newBanner,
       });
     } catch (err) {
-      res.status(500).json({ result_code: 1, result_msg: err.message });
+      res.status(500).json({ result_msg: err.message });
     }
   },
 
@@ -46,7 +46,7 @@ const bannerController = {
         query = { bannerId: bannerId };
       } else {
         return res.status(400).json({
-          result_code: 0,
+          result_code: -1,
           result_msg: "Both rid and bannerId are required",
           data: null,
         });
@@ -55,7 +55,7 @@ const bannerController = {
       const banner = await bannerService.getBannerByQuery(query);
       if (!banner) {
         return res.status(404).json({
-          result_code: 0,
+          result_code: -3,
           result_msg: "Banner not found",
           data: null,
         });
@@ -66,7 +66,7 @@ const bannerController = {
         data: banner,
       });
     } catch (err) {
-      res.status(500).json({ result_code: 1, result_msg: err.message });
+      res.status(500).json({ result_msg: err.message });
     }
   },
 
@@ -76,7 +76,7 @@ const bannerController = {
       const deletedBanner = await bannerService.deleteBannerById(bannerId);
       if (!deletedBanner) {
         return res.status(404).json({
-          result_code: 0,
+          result_code: -3,
           result_msg: "Banner not found",
           data: null,
         });
@@ -86,7 +86,7 @@ const bannerController = {
         result_msg: "Banner deleted successfully",
       });
     } catch (err) {
-      res.status(500).json({ result_code: 1, result_msg: err.message });
+      res.status(500).json({ result_msg: err.message });
     }
   },
 };

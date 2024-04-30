@@ -27,9 +27,9 @@ async function uploadFiles(req, res) {
       filesInfo.push(savedFile);
     }
 
-    res.json({ result_msg: "Upload", files: filesInfo });
+    res.json({ result_code: 0, result_msg: "Upload", files: filesInfo });
   } catch (error) {
-    res.status(500).json({ error: "Failed to upload files" });
+    res.status(500).json({ result_msg: error.message });
   }
 }
 
@@ -40,7 +40,9 @@ async function updateFile(req, res) {
     const fileToUpdate = await File.findOne({ fid });
 
     if (!fileToUpdate) {
-      return res.status(404).json({ result_msg: "File not found" });
+      return res
+        .status(404)
+        .json({ result_code: -3, result_msg: "File not found" });
     }
 
     // Update the file on the server
@@ -59,9 +61,9 @@ async function updateFile(req, res) {
     fileToUpdate.path = newPath;
     await fileToUpdate.save();
 
-    res.json({ result_msg: "File updated", file: fileToUpdate });
+    res.json({ result_code: 0, result_msg: "File updated", file: fileToUpdate });
   } catch (error) {
-    res.status(500).json({ error: "Failed to update file" });
+    res.status(500).json({ result_msg: error.message });
   }
 }
 
