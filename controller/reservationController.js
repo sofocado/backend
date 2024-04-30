@@ -5,7 +5,7 @@ async function addReservation(req, res) {
     const reservation = await reservationService.addReservation(req.body);
     res.status(200).json(reservation);
   } catch (error) {
-    res.status(400).json({ result_msg: error.message });
+    res.status(400).json({ result_code: -1, result_msg: error.message });
   }
 }
 

@@ -20,7 +20,7 @@ async function listFavorites(req, res) {
     const favorites = await favoriteService.listFavorites(uid);
     res.json({ result_code: 0, result_msg: "Success!", data: { recordcount: favorites.length, rows: favorites } });
   } catch (error) {
-    res.status(500).json({ result_code: -1, result_msg: error.message });
+    res.status(500).json({ result_msg: error.message });
   }
 }
 
@@ -30,7 +30,7 @@ async function removeFavorite(req, res) {
     await favoriteService.removeFavorite(uid, rid);
     res.status(200).json({ result_code: 0, result_msg: "Success!" });
   } catch (error) {
-    res.status(500).json({ result_code: -1, result_msg: error.message });
+    res.status(500).json({ result_msg: error.message });
   }
 }
 

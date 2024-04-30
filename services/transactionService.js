@@ -58,7 +58,6 @@ async function listTransactions(uid, rid, sort) {
   }
 }
 
-
 async function deleteTransaction(uid, rid, transactionId) {
   try {
     let query = { transactionId };

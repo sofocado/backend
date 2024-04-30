@@ -9,7 +9,7 @@ async function addReview(req, res) {
       data: review,
     });
   } catch (error) {
-    res.status(400).json({ result_msg: error.message });
+    res.status(400).json({ result_code: -1, result_msg: error.message });
   }
 }
 
@@ -37,7 +37,7 @@ async function deleteReview(req, res) {
       data: result,
     });
   } catch (error) {
-    res.status(400).json({ result_msg: error.message });
+    res.status(400).json({ result_code: -1, result_msg: error.message });
   }
 }
 

@@ -8,7 +8,7 @@ async function addCard(req, res) {
       .status(200)
       .json({ result_code: 0, result_msg: "Success!", data: card });
   } catch (error) {
-    res.status(400).json({ result_msg: error.message });
+    res.status(400).json({ result_code: -1, result_msg: error.message });
   }
 }
 
@@ -20,7 +20,7 @@ async function getCard(req, res) {
       .status(200)
       .json({ result_code: 0, result_msg: "Success!", data: card });
   } catch (error) {
-    res.status(400).json({ result_msg: error.message });
+    res.status(400).json({ result_code: -1, result_msg: error.message });
   }
 }
 
