@@ -23,12 +23,18 @@ async function listRestaurants(filters) {
         query.category = filters.filter.category;
       }
 
-      if (filters.filter.parking !== undefined) {
+      if (
+        filters.filter.parking !== undefined &&
+        filters.filter.parking !== null
+      ) {
         query.parking = parseInt(filters.filter.parking);
       }
 
-      if (filters.filter.praingRoom !== undefined) {
-        query.prayingRoom = parseInt(filters.filter.praingRoom);
+      if (
+        filters.filter.prayingRoom !== undefined &&
+        filters.filter.prayingRoom !== null
+      ) {
+        query.prayingRoom = parseInt(filters.filter.prayingRoom);
       }
     }
 
