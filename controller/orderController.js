@@ -40,8 +40,8 @@ async function deleteOrder(req, res) {
 
 async function getOrder(req, res) {
   try {
-    const { uid, rid, orderId } = req.body;
-    const order = await orderService.getOrder(uid, rid, orderId);
+    const { orderId } = req.body;
+    const order = await orderService.getOrder(orderId);
     res
       .status(200)
       .json({ result_code: 0, result_msg: "Success!", data: order });
