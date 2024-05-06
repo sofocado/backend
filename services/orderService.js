@@ -48,12 +48,15 @@ async function addOrder(uid, menuItems, quantities, rid) {
 async function listOrders(uid, rid) {
   try {
     let query = {};
+
     if (uid !== null && uid !== "") {
       query.uid = uid;
     }
+
     if (rid !== null && rid !== "") {
       query.rid = rid;
     }
+
     const orders = await Order.find(query);
 
     const ordersWithMenuData = await Promise.all(
@@ -95,16 +98,9 @@ async function deleteOrder(orderId) {
   }
 }
 
-async function getOrder(uid, rid, orderId) {
+async function getOrder(orderId) {
   try {
-    let query = { orderId };
-    if (uid !== null && uid !== "") {
-      query.uid = uid;
-    }
-    if (rid !== null && rid !== "") {
-      query.rid = rid;
-    }
-    const order = await Order.findOne(query);
+    const order = await Order.findOne({ orderId });
     if (!order) {
       throw new Error("Order not found");
     }
@@ -135,6 +131,15 @@ async function getOrder(uid, rid, orderId) {
     throw new Error(error.message);
   }
 }
+
+module.exports = {
+  calculateTotal,
+  addOrder,
+  listOrders,
+  deleteOrder,
+  getOrder,
+};
+
 
 
 module.exports = {
