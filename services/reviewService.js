@@ -85,20 +85,24 @@ async function listReviews(rid) {
 }
 
 async function deleteReview(uid, reviewId) {
-  const review = await Review.findOne({ reviewId });
+  const review = await Review.findOne({ "reviews.reviewId": reviewId });
   if (!review) {
     throw new Error("Review not found");
   }
 
-  const reviewIndex = review.reviews.findIndex((r) => r.uid === uid);
-  if (reviewIndex === -1) {
+  const reviewItem = review.reviews.find(
+    (r) => r.reviewId === reviewId && r.uid === uid
+  );
+  if (!reviewItem) {
     throw new Error("Review not found for the given user");
   }
-  const removedReview = review.reviews.splice(reviewIndex, 1)[0];
+
   const ratingKey = ["one", "two", "three", "four", "five"][
-    removedReview.rating - 1
+    reviewItem.rating - 1
   ];
   review.avgRate[ratingKey] -= 1;
+
+  review.reviews = review.reviews.filter((r) => r.reviewId !== reviewId);
 
   const totalReviews = review.reviews.length;
   const totalRating = review.reviews.reduce(
