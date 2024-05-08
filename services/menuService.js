@@ -19,7 +19,6 @@ async function listMenus(rid, filter) {
   return menus;
 }
 
-
 async function getMenu(menuId) {
   const menu = await Menu.findOne({ menuId: menuId });
   if (!menu) {

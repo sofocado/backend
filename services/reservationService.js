@@ -4,12 +4,12 @@ const Table = require("../model/Table")
 async function addReservation(data) {
   try {
     const { tid, reservationStartTime } = data;
-    const reservationDuration = 5940; // 1:45 min
+    const reservationDuration = 5400; // 1:45 min
     const reservationEndTime = reservationStartTime + reservationDuration;
 
     const table = await Table.findOne({ tid: tid });
     if (!table) {
-      throw new Error("Нет столов этого типа");
+      throw new Error("There are no such tables");
     }
 
     const reservations = await Reservation.find({ tid: tid, resStatus: 1 });
@@ -28,7 +28,7 @@ async function addReservation(data) {
     });
 
     if (availableTables.length === 0) {
-      throw new Error("Нет доступных столов");
+      throw new Error("There are no tables available");
     }
 
     const availableTable =

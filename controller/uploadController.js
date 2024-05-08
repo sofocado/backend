@@ -33,7 +33,6 @@ async function uploadFiles(req, res) {
   }
 }
 
-// New function to update a file
 async function updateFile(req, res) {
   try {
     const { fid } = req.params;
@@ -45,7 +44,6 @@ async function updateFile(req, res) {
         .json({ result_code: -3, result_msg: "File not found" });
     }
 
-    // Update the file on the server
     const file = req.file;
     const fileExtension = "." + file.mimetype.split("/")[1];
     const newFilename = `${uuidv4()}${fileExtension}`;
@@ -53,7 +51,6 @@ async function updateFile(req, res) {
     const newPath = path.join(file.destination, newFilename);
     fs.renameSync(oldPath, newPath);
 
-    // Update the file information in the database
     fileToUpdate.originalname = file.originalname;
     fileToUpdate.mimetype = file.mimetype;
     fileToUpdate.size = file.size;

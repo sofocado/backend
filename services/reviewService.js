@@ -112,8 +112,17 @@ async function deleteReview(uid, reviewId) {
   review.avgRate.totalRate = totalReviews > 0 ? totalRating / totalReviews : 0;
 
   await review.save();
-  return { message: "Review deleted successfully" };
+
+  const totalRatingRestaurant = await calculateTotalRating(review.rid);
+  await Restaurant.findOneAndUpdate(
+    { rid: review.rid },
+    { rating: totalRatingRestaurant },
+    { new: true }
+  );
+
+  return { result_msg: "Review deleted successfully" };
 }
+
 
 module.exports = {
   addReview,
