@@ -2,8 +2,8 @@ const orderService = require("../services/orderService");
 
 async function addOrder(req, res) {
   try {
-    const { uid, menu, quantity, rid } = req.body;
-    const order = await orderService.addOrder(uid, menu, quantity, rid);
+    const { uid, menu, quantity, rid, tableId } = req.body;
+    const order = await orderService.addOrder(uid, menu, quantity, rid, tableId);
     res
       .status(200)
       .json({ result_code: 0, result_msg: "Success!", data: order });
