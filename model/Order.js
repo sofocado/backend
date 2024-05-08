@@ -40,6 +40,11 @@ const orderSchema = new mongoose.Schema({
     type: Number,
     default: Math.floor(Date.now() / 1000),
   },
+  orderCode: {
+    type: String,
+    required: true,
+    default: () => Math.random().toString(36).substr(2, 6).toUpperCase(),
+  },
 });
 
 const Order = mongoose.model("Order", orderSchema);
