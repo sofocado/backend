@@ -49,7 +49,7 @@ async function listTables(rid) {
 async function deleteTable({ tableId, tid }) {
   try {
     if (!tableId && !tid) {
-      throw new Error("Необходимо указать либо tableId, либо tid");
+      throw new Error("Either tableId or tid must be specified");
     }
 
     let query = {};
@@ -65,7 +65,7 @@ async function deleteTable({ tableId, tid }) {
     const tableDoc = await Table.findOne(query);
 
     if (!tableDoc) {
-      throw new Error("Стол не найден");
+      throw new Error("Table not found");
     }
 
     if (tableId && !tid) {

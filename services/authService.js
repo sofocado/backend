@@ -81,7 +81,6 @@ router.post("/update", async (req, res) => {
     user.rid = rid || user.rid;
     user.path = path !== undefined ? (path !== null ? path : "") : user.path;
 
-    // Если пароль передается в запросе, обновляем его
     if (password) {
       user.password = password;
     }
