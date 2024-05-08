@@ -16,9 +16,13 @@ const orderSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  tableId: {
+    type: String,
+    default: null,
+  },
   menu: [
     {
-      type: String, 
+      type: String,
       required: true,
     },
   ],

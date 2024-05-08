@@ -14,7 +14,7 @@ async function calculateTotal(menuId, quantity) {
   }
 }
 
-async function addOrder(uid, menuItems, quantities, rid) {
+async function addOrder(uid, menuItems, quantities, rid, tableId) {
   try {
     if (menuItems.length !== quantities.length) {
       throw new Error(
@@ -37,6 +37,7 @@ async function addOrder(uid, menuItems, quantities, rid) {
       quantity: quantities,
       total,
       rid,
+      tableId
     });
     const savedOrder = await order.save();
     return savedOrder;
