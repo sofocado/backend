@@ -1,10 +1,10 @@
 const Reservation = require("../model/Reservation");
-const Table = require("../model/Table")
+const Table = require("../model/Table");
 
 async function addReservation(data) {
   try {
     const { tid, reservationStartTime } = data;
-    const reservationDuration = 5400; // 1:45 min
+    const reservationDuration = 5400; 
     const reservationEndTime = reservationStartTime + reservationDuration;
 
     const table = await Table.findOne({ tid: tid });
@@ -12,19 +12,17 @@ async function addReservation(data) {
       throw new Error("There are no such tables");
     }
 
-    const reservations = await Reservation.find({ tid: tid, resStatus: 1 });
+    const reservations = await Reservation.find({ tid: tid });
+    const bookedTables = reservations.filter((res) => {
+      return (
+        res.resStatus === 0 && 
+        reservationStartTime < res.reservationEndTime &&
+        reservationEndTime > res.reservationStartTime
+      );
+    });
 
     const availableTables = table.tables.filter((t) => {
-      const isBooked = reservations.some((res) => {
-        return (
-          res.tableId === t.tableId &&
-          ((reservationStartTime < res.reservationEndTime &&
-            reservationStartTime >= res.reservationStartTime) ||
-            (reservationEndTime > res.reservationStartTime &&
-              reservationEndTime <= res.reservationEndTime))
-        );
-      });
-      return t.status === 0 && !isBooked;
+      return !bookedTables.some((res) => res.tableId === t.tableId);
     });
 
     if (availableTables.length === 0) {
@@ -38,10 +36,13 @@ async function addReservation(data) {
       ...data,
       tableId: availableTable.tableId,
       reservationEndTime,
-      resStatus: 0, 
+      resStatus: 0,
     });
 
     const savedReservation = await newReservation.save();
+
+    availableTable.status = 1;
+    await table.save();
 
     return {
       result_code: 0,
