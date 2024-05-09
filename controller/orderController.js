@@ -14,8 +14,8 @@ async function addOrder(req, res) {
 
 async function listOrders(req, res) {
   try {
-    const { uid, rid } = req.body;
-    const orders = await orderService.listOrders(uid, rid);
+    const { uid, rid, time } = req.body;
+    const orders = await orderService.listOrders(uid, rid, time);
     res.status(200).json({
       result_code: 0,
       result_msg: "Success!",

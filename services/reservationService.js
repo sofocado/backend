@@ -54,7 +54,7 @@ async function addReservation(data) {
   }
 }
 
-async function listReservations(uid, rid, sort) {
+async function listReservations(uid, rid, sort, timeFilter) {
   try {
     let query = {};
 
@@ -64,6 +64,23 @@ async function listReservations(uid, rid, sort) {
 
     if (rid !== null && rid !== "") {
       query.rid = rid;
+    }
+
+    if (timeFilter && timeFilter.length > 0) {
+      const timeFilterZero = timeFilter.every(
+        (filter) => filter.min === 0 && filter.max === 0
+      );
+
+      if (!timeFilterZero) {
+        const timeQueries = timeFilter.map((filter) => ({
+          [filter.key]: {
+            $gte: filter.min,
+            $lte: filter.max !== 0 ? filter.max : Date.now() / 1000,
+          },
+        }));
+
+        query.$and = timeQueries;
+      }
     }
 
     const sortOptions = {};

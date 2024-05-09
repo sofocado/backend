@@ -48,7 +48,7 @@ async function addOrder(uid, menuItems, quantities, rid, tableId) {
   }
 }
 
-async function listOrders(uid, rid) {
+async function listOrders(uid, rid, timeFilter) {
   try {
     let query = {};
 
@@ -58,6 +58,23 @@ async function listOrders(uid, rid) {
 
     if (rid !== null && rid !== "") {
       query.rid = rid;
+    }
+
+    if (timeFilter && timeFilter.length > 0) {
+      const timeFilterZero = timeFilter.every(
+        (filter) => filter.min === 0 && filter.max === 0
+      );
+
+      if (!timeFilterZero) {
+        const timeQueries = timeFilter.map((filter) => ({
+          [filter.key]: {
+            $gte: filter.min,
+            $lte: filter.max !== 0 ? filter.max : Date.now() / 1000,
+          },
+        }));
+
+        query.$and = timeQueries;
+      }
     }
 
     const orders = await Order.find(query);
@@ -142,8 +159,6 @@ module.exports = {
   deleteOrder,
   getOrder,
 };
-
-
 
 module.exports = {
   calculateTotal,
