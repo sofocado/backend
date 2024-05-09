@@ -36,7 +36,6 @@ const tableSchema = new mongoose.Schema({
       tableCode: {
         type: String,
         required: true,
-        default: () => Math.random().toString(36).substr(2, 6).toUpperCase(),
       },
     },
   ],

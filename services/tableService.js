@@ -11,6 +11,7 @@ async function addTable(type, tableCount, rid) {
       const newTables = Array.from({ length: tableCount }, () => ({
         tableId: uuidv4(),
         status: 0,
+        tableCode: Math.random().toString(36).substr(2, 6).toUpperCase(),
       }));
       existingTable.tables = existingTable.tables.concat(newTables);
 
@@ -20,6 +21,7 @@ async function addTable(type, tableCount, rid) {
       const tables = Array.from({ length: tableCount }, () => ({
         tableId: uuidv4(),
         status: 0,
+        tableCode: Math.random().toString(36).substr(2, 6).toUpperCase(),
       }));
 
       const newTable = new Table({

@@ -31,13 +31,15 @@ async function addOrder(uid, menuItems, quantities, rid, tableId) {
       }
       total += menu.price * quantity;
     }
+    const orderCode = Math.random().toString(36).substr(2, 6).toUpperCase();
     const order = new Order({
       uid,
       menu: menuItems,
       quantity: quantities,
       total,
       rid,
-      tableId
+      tableId,
+      orderCode,
     });
     const savedOrder = await order.save();
     return savedOrder;
