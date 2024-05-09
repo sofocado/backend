@@ -11,14 +11,20 @@ async function addReservation(req, res) {
 
 async function listReservations(req, res) {
   try {
-    const uid = req.body.uid; 
-    const rid = req.body.rid;
-    const sort = req.body.sort || [];
-    const reservations = await reservationService.listReservations(
-      uid,
-      rid,
-      sort
-    );
+    const { uid, rid, sort, time } = req.body;
+    let reservations;
+
+    if (time && time.length > 0) {
+      reservations = await reservationService.listReservations(
+        uid,
+        rid,
+        sort,
+        time
+      );
+    } else {
+      reservations = await reservationService.listReservations(uid, rid, sort);
+    }
+
     res.status(200).json(reservations);
   } catch (error) {
     res.status(500).json({ result_msg: error.message });
@@ -28,7 +34,9 @@ async function listReservations(req, res) {
 async function deleteReservation(req, res) {
   try {
     await reservationService.deleteReservation(req.body.reservationId);
-    res.status(200).json({ result_code: 0, result_msg: "Reservation deleted successfully" });
+    res
+      .status(200)
+      .json({ result_code: 0, result_msg: "Reservation deleted successfully" });
   } catch (error) {
     res.status(500).json({ result_msg: error.message });
   }
