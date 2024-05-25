@@ -77,7 +77,14 @@ async function getTransaction(req, res) {
         .status(404)
         .json({ result_code: -3, result_msg: error.message });
     }
-    res.status(200).json(transaction);
+    res.status(200).json({
+      result_code: 0,
+      result_msg: "Success!",
+      data: {
+        recordcount: transaction.length,
+        rows: transaction,
+      },
+    });
   } catch (error) {
     res.status(400).json({ result_code: -1, result_msg: error.message });
   }
