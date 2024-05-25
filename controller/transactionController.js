@@ -26,15 +26,16 @@ async function listTransaction(req, res) {
   }
 
   try {
-    const transactions = await transactionService.listTransactions(
-      uid,
-      rid,
-      sort
-    );
+    const { transactions, totalAmount } =
+      await transactionService.listTransactions(uid, rid, sort);
     res.status(200).json({
       result_code: 0,
       result_msg: "Success!",
-      data: { recordcount: transactions.length, rows: transactions },
+      data: {
+        recordcount: transactions.length,
+        total: totalAmount,
+        rows: transactions,
+      },
     });
   } catch (error) {
     res.status(500).json({ result_msg: error.message });

@@ -52,7 +52,13 @@ async function listTransactions(uid, rid, sort) {
     });
 
     const transactions = await Transaction.find(query).sort(sortOptions);
-    return transactions;
+
+    const totalAmount = transactions.reduce(
+      (sum, transaction) => sum + transaction.amount,
+      0
+    );
+    
+    return { transactions, totalAmount };
   } catch (error) {
     throw error;
   }
