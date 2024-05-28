@@ -20,14 +20,16 @@ async function addTransaction(req, res) {
 }
 
 async function listTransaction(req, res) {
-  const { uid, rid, sort } = req.body;
+  const { uid, rid, sort, timeInterval } = req.body;
   if (!(uid || rid)) {
-    return res.status(400).json({ result_code: -1, result_msg: error.message });
+    return res
+      .status(400)
+      .json({ result_code: -1, result_msg: "Invalid input parameters." });
   }
 
   try {
     const { transactions, totalAmount } =
-      await transactionService.listTransactions(uid, rid, sort);
+      await transactionService.listTransactions(uid, rid, sort, timeInterval);
     res.status(200).json({
       result_code: 0,
       result_msg: "Success!",

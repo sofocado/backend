@@ -1,6 +1,7 @@
 const Transaction = require("../model/Transaction");
 const Order = require("../model/Order");
 const Card = require("../model/Card");
+const moment = require('moment');
 
 async function addTransaction(uid, cardId, orderId) {
   try {
@@ -37,13 +38,38 @@ async function addTransaction(uid, cardId, orderId) {
   }
 }
 
-async function listTransactions(uid, rid, sort) {
+async function listTransactions(uid, rid, sort, timeInterval) {
   try {
     let query = {};
     if (uid) {
       query.uid = uid;
     } else if (rid) {
       query.rid = rid;
+    }
+
+    // Time interval filter
+    const now = moment().unix();
+    let startTime;
+
+    switch (timeInterval) {
+      case "day":
+        startTime = moment().subtract(1, "days").unix();
+        break;
+      case "week":
+        startTime = moment().subtract(1, "weeks").unix();
+        break;
+      case "month":
+        startTime = moment().subtract(1, "months").unix();
+        break;
+      case "year":
+        startTime = moment().subtract(1, "years").unix();
+        break;
+      default:
+        startTime = 0; // No filtering if no valid interval provided
+    }
+
+    if (startTime) {
+      query.createTime = { $gte: startTime, $lte: now };
     }
 
     const sortOptions = {};
@@ -57,7 +83,7 @@ async function listTransactions(uid, rid, sort) {
       (sum, transaction) => sum + transaction.amount,
       0
     );
-    
+
     return { transactions, totalAmount };
   } catch (error) {
     throw error;
